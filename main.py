@@ -1,13 +1,9 @@
 import pygame
 import traceback
-<<<<<<< Updated upstream
-from map import Map
-=======
 from maze_map import Map
 from player import *
 import random
 from pygame.locals import *
->>>>>>> Stashed changes
 
 class Main:
 
@@ -16,12 +12,12 @@ class Main:
 	number_squares, size_squares = 15, 40
 	screen_size = (number_squares * size_squares, number_squares * size_squares)
 	loop = True
+	number_free_squares = 0
+	object_position = 0
 
 	try:
 	
 		pygame.init()
-
-		
 
 		screen = pygame.display.set_mode(screen_size)
 		screen.fill(WHITE)
@@ -29,37 +25,13 @@ class Main:
 		pygame.display.set_caption("Save McGiver from the maze")
 
 		wall = pygame.image.load("ressource/wall.png").convert()
-		floor = pygame.image.load("ressource/floor.png")
-		start = pygame.image.load("ressource/start.png")
-		end = pygame.image.load("ressource/end.png")
+		floor = pygame.image.load("ressource/floor.png").convert()
+		start = pygame.image.load("ressource/start.png").convert()
+		end = pygame.image.load("ressource/end.png").convert()
+
 		McGyver = pygame.image.load("ressource/MacGyver.png")
 		Guardian = pygame.image.load("ressource/Guardian.png")
 
-<<<<<<< Updated upstream
-		while loop:
-			pygame.time.Clock().tick(40)
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					loop = False
-
-			for i in range(15):
-				for j in range(15):
-					x = i*40
-					y = j*40
-					if Map.maze_grid[i][j] == "9":
-						screen.blit(wall, (x,y))
-					if Map.maze_grid[i][j] == "0":
-						screen.blit(floor, (x,y))
-					if Map.maze_grid[i][j] == "1":
-						screen.blit(start, (x,y))
-						screen.blit(McGyver, (x+3,y))
-					if Map.maze_grid[i][j] == "2":
-						screen.blit(end, (x,y))
-						screen.blit(Guardian, (x+3,y+4))
-			#endroit où construire ma map
-
-			pygame.display.flip()
-=======
 		plastic_tube = pygame.image.load("ressource/plastic_tube.png").convert_alpha()
 		needle = pygame.image.load("ressource/needle.png").convert_alpha()
 		syringe = pygame.image.load("ressource/syringe.png").convert_alpha()
@@ -177,12 +149,12 @@ class Main:
 								player.move("down")
 							
 				pygame.display.flip()
-				print(Map.maze_grid)
->>>>>>> Stashed changes
 
 	except:
+
 		traceback.print_exc()
 
 	finally:
+
 		pygame.quit()
 
