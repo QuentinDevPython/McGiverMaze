@@ -20,11 +20,14 @@ class Map:
 
 	maze_file.close()
 
+	def get_position_player():
+		for column_maze_grid in range(Map.WIDTH):
+			for line_maze_grid in range(Map.LENGHT):
+				if Map.maze_grid[column_maze_grid][line_maze_grid] == "1":
+					return line_maze_grid,column_maze_grid
 
-	def __init__(self):
-		self.screen = pygame.display.get_surface()
-		self.squares = {}
-		self.squares["9"] = pygame.image.load("ressource/wall.png")
-
-	def get_position(self, x, y):
-		return maze_grid[x][y]
+	def get_position_Guardian():
+		for column_maze_grid in range(Map.WIDTH):
+			for line_maze_grid in range(Map.LENGHT):
+				if Map.maze_grid[column_maze_grid][line_maze_grid] == "2":
+					return line_maze_grid,column_maze_grid
