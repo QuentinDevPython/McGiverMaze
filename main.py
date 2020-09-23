@@ -1,7 +1,9 @@
 import pygame
 import traceback
-from map import Map
+from maze_map import Map
+from player import *
 import random
+from pygame.locals import *
 
 class Main:
 
@@ -51,8 +53,8 @@ class Main:
 
 		for column_maze_grid in range(15):
 			for line_maze_grid in range(15):
-				position_x = column_maze_grid*40
-				position_y = line_maze_grid*40
+				position_x = column_maze_grid*size_squares
+				position_y = line_maze_grid*size_squares
 
 				if Map.maze_grid[line_maze_grid][column_maze_grid] == "9":
 					screen.blit(wall, (position_x,position_y))
@@ -63,32 +65,90 @@ class Main:
 
 					if object_position == position_plastic_tube:
 						screen.blit(plastic_tube, (position_x,position_y))
-						Map.maze_grid[line_maze_grid][column_maze_grid] = 3
+						Map.maze_grid[line_maze_grid][column_maze_grid] = "3"
 
 					if object_position == position_needle:
 						screen.blit(needle, (position_x,position_y))
-						Map.maze_grid[line_maze_grid][column_maze_grid] = 3
+						Map.maze_grid[line_maze_grid][column_maze_grid] = "3"
 
 					if object_position == position_syringe:
 						screen.blit(syringe, (position_x,position_y))
-						Map.maze_grid[line_maze_grid][column_maze_grid] = 3
+						Map.maze_grid[line_maze_grid][column_maze_grid] = "3"
 
 				if Map.maze_grid[line_maze_grid][column_maze_grid] == "1":
 					screen.blit(start, (position_x,position_y))
-					screen.blit(McGyver, (position_x+3,position_y-4))
+					screen.blit(McGyver, (position_x+3,position_y-1))
+					player = Player(position_x,position_y)
 
 				if Map.maze_grid[line_maze_grid][column_maze_grid] == "2":
 					screen.blit(end, (position_x,position_y))
 					screen.blit(Guardian, (position_x+3,position_y+4))
 
+		pygame.key.set_repeat(400,30)
+
 		while loop:
+			if player.is_Victorious():
+				loop = False
+			else:
+				pygame.time.Clock().tick(40)
+				for event in pygame.event.get():
+					if event.type == pygame.QUIT:
+						loop = False
+					if event.type == pygame.KEYDOWN:
 
-			pygame.time.Clock().tick(40)
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					loop = False
+						if event.key == K_RIGHT:
 
-			pygame.display.flip()
+							if player.take_object("right"):
+								print(player.inventory)
+								screen.blit(floor,(Map.get_position_player()[0]*40 - 40, Map.get_position_player()[1]*40))
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40))
+								screen.blit(McGyver, (Map.get_position_player()[0]*40+ 3, Map.get_position_player()[1]*40 -1))
+
+							elif player.can_be_moved("right"):
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40))
+								screen.blit(McGyver, (Map.get_position_player()[0]*40+ 40 + 3, Map.get_position_player()[1]*40 -1))
+								player.move("right")
+
+						if event.key == K_LEFT:
+
+							if player.take_object("left"):
+								print(player.inventory)
+								screen.blit(floor,(Map.get_position_player()[0]*40 + 40, Map.get_position_player()[1]*40))
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40))
+								screen.blit(McGyver, (Map.get_position_player()[0]*40 + 3, Map.get_position_player()[1]*40 -1))
+
+							elif player.can_be_moved("left"):
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40))
+								screen.blit(McGyver, (Map.get_position_player()[0]*40 - 40 + 3, Map.get_position_player()[1]*40-1))
+								player.move("left")
+
+						if event.key == K_UP:
+
+							if player.take_object("up"):
+								print(player.inventory)
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40+40))
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40))
+								screen.blit(McGyver, (Map.get_position_player()[0]*40 + 3, Map.get_position_player()[1]*40 -1))
+
+							elif player.can_be_moved("up"):
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40))
+								screen.blit(McGyver, (Map.get_position_player()[0]*40+ 3, Map.get_position_player()[1]*40 - 40 -1))
+								player.move("up")
+
+						if event.key == K_DOWN:
+
+							if player.take_object("down"):
+								print(player.inventory)
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40-40))
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40))
+								screen.blit(McGyver, (Map.get_position_player()[0]*40 + 3, Map.get_position_player()[1]*40 -1))
+
+							elif player.can_be_moved("down"):
+								screen.blit(floor,(Map.get_position_player()[0]*40, Map.get_position_player()[1]*40))
+								screen.blit(McGyver, (Map.get_position_player()[0]*40+ 3, Map.get_position_player()[1]*40 + 40 -1))
+								player.move("down")
+							
+				pygame.display.flip()
 
 	except:
 
